@@ -1,11 +1,16 @@
 import React from 'react'
+import { Footer, Navbar, Services, Transactions, Welcome } from './components'
 
 const App = () => {
   return (
-    <div className="App">
-      <h1 className="text-4xl font-semibold text-cyan-500 underline">
-        Hello there
-      </h1>
+    <div className="min-h-screen">
+      <h1 className="gradient-bg-welcome">
+        <Navbar/>
+        <Welcome/>
+      </h1 >
+      <Services/>
+      <Transactions/>
+      <Footer/>
     </div>
   )
 }
