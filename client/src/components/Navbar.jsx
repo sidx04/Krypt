@@ -24,7 +24,7 @@ const Navbar = () => {
         {["Market", "Exchange", "Tutorials", "Wallets"].map((item,index)=>(
           <NavbarItem key={item+index} title={item}/>
         ))}
-        <li className="bg-indigo-500 font-medium py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-indigo-600">Login</li>
+        <li className="bg-indigo-500 font-medium py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-indigo-600 duration-200">Login</li>
       </ul>
       <div className="flex-relative ">
         {toggleMenu
