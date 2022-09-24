@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {AiFillPlayCircle} from 'react-icons/ai'
 import {SiE, SiEthereum} from 'react-icons/si'
 import {BsInfoCircle} from 'react-icons/bs'
 import {Loader} from './'
+import { TransactionContext } from '../context/TransactionContext'
 
 const commonStyles="min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-yellow-50"
 
@@ -18,14 +19,13 @@ const Input=({placeholder, name, type,value, handleChange})=>{
   )
 }
 const Welcome = () => {
-
-  const connectWallet=()=>{
-
-  }
-
+  const {connectWallet, currentAccount}=useContext(TransactionContext);
+  console.log(currentAccount);
+  
   const handleSubmit=()=>{
 
   }
+
   return (
     <div className="flex w-full justify-center items-center">
       <div className="flex md:flex-row flex-col items-start justify-between md:padding-20 py-12 px-4">
