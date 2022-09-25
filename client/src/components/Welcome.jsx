@@ -15,15 +15,20 @@ const Input=({placeholder, name, type,value, handleChange})=>{
      step="0.0001"
      value={value}
      onChange={(e)=>handleChange(e,name)}
-     className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-yellow-50 border-none text-sm white-glassmorphism"></input>
+     className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-yellow-50
+                 border-none text-sm white-glassmorphism">
+      </input>
   )
 }
 const Welcome = () => {
-  const {connectWallet, currentAccount}=useContext(TransactionContext);
-  console.log(currentAccount);
+  const {connectWallet, currentAccount, formData, sendTransaction ,handleChange}=useContext(TransactionContext);
   
-  const handleSubmit=()=>{
+  const handleSubmit=(e)=>{
+    const {addressTo, amount, keyword, message}=formData;
+    e.preventDefault();
+    if(!addressTo||!keyword||!amount||!message) return;
 
+    sendTransaction();
   }
 
   return (
@@ -41,7 +46,9 @@ const Welcome = () => {
           <button
            type="button"
            onClick={connectWallet}
-           className="flex flex-row justify-center items-center my-5 bg-indigo-500 p-3 rounded-full cursor-pointer hover:bg-indigo-600 duration-200 transform transition-all hover:scale-110">
+           className="flex flex-row justify-center items-center my-5 bg-indigo-500 p-3
+            rounded-full cursor-pointer hover:bg-indigo-600 duration-200
+            transform transition-all hover:scale-110">
             <p className="text-white text-base font-semibold">Connect Wallet</p>
            </button>
            )}
@@ -57,7 +64,8 @@ const Welcome = () => {
         </div>
 
         <div className="flex flex-col flex-1 items-center justify-start w-full md:mt-0 mt-10">
-          <div className="p-3 flex flex-col justify-end items-start rounded-xl h-40 sm:w-72 w-full my-5 eth-card white-glassmorphism">
+          <div className="p-3 flex flex-col justify-end items-start rounded-xl h-40 sm:w-72 w-full my-5
+                          eth-card white-glassmorphism">
             <div className="flex justify-between flex-col w-full h-full ">
               <div className="flex justify-between items-start">
                 <div className="w-11 h-11 rounded-full border-4 border-white flex justify-center items-center">
@@ -77,20 +85,21 @@ const Welcome = () => {
           </div>
 
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-            <Input placeholder="Address To" name="addressTo" type="text" handleChange={()=>{}}/>
-            <Input placeholder="Amount" name="amount" type="number" handleChange={()=>{}}/>
-            <Input placeholder="Keyword(GIF)" name="keyword" type="text" handleChange={()=>{}}/>
-            <Input placeholder="Enter message" name="message" type="text" handleChange={()=>{}}/>
+            <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange}/>
+            <Input placeholder="Amount" name="amount" type="number" handleChange={handleChange}/>
+            <Input placeholder="Keyword(GIF)" name="keyword" type="text" handleChange={handleChange}/>
+            <Input placeholder="Enter message" name="message" type="text" handleChange={handleChange}/>
 
             <div className="h-[1px] w-full bg-gray-400 my-2"></div>
 
-            {true?(
+            {false?(
               <Loader/>
             ):(
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="text-white mt-2 w-full border-[1px] rounded-lg p-2 border-[#3d4f7c] cursor-pointer font-medium ">
+                className="text-white mt-2 w-full border-[1px] rounded-lg p-2 border-[#3d4f7c]
+                             cursor-pointer font-medium transform transition-all hover:scale-105">
                   Send Now
                 </button>
             )}

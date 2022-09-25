@@ -23,6 +23,14 @@ const getEthereumContract=()=>{
 export const TransactionProvider=({children})=>{
 
     const [currentAccount, setCurrentAccount] = useState("")
+    const [formData, setformData] = useState({addressTo:'', amount:'', keyword:'',message:''})
+    const [isLoading, setisLoading] = useState(false)
+    const [transactionCount, settransactionCount] = useState(localStorage.getItem('transactionCount'))
+    const [transactions, settransactions] = useState([])
+
+    const handleChange=(e,name)=>{
+        setformData((prevState)=>({...prevState,[name]:e.target.value}))
+    }
 
     const checkIfWalletIsConnected=async()=>{
         try {
@@ -60,14 +68,59 @@ export const TransactionProvider=({children})=>{
         }
     }
 
+    const sendTransaction=async()=>{
+        try {
+            if(!ethereum){
+                return alert("Please install Metamask!")
+            }
+            const {addressTo, amount, keyword, message}=formData;
+            const transactionContract=getEthereumContract();
+            const parsedAmount=ethers.utils.parseEther(amount)
+
+            await ethereum.request({
+                method:'eth_sendTransaction',
+                params:[{
+                    from:currentAccount,
+                    to:addressTo,
+                    gas:'0x4e20', //20k gwei, gewi=sub-unit of ether
+                    value:parsedAmount._hex
+                }]
+            })
+
+            const transactionHash=await transactionContract.addToBlockchain(addressTo,parsedAmount,message,keyword)
+            setisLoading(true);
+            console.log('Loading');
+
+            await transactionHash.wait()
+            setisLoading(false)
+            console.log('Transaction successful');
+
+            const transactionCount=await transactionContract.getTransactionCount()
+
+            settransactionCount(transactionCount.toNumber())
+
+        } catch (error) {
+            console.log(error);
+            throw new Error("No Ethereum object!")
+        }
+    }
+
     useEffect(() => {
       checkIfWalletIsConnected();
     },[])
     
 
     return(
-        <TransactionContext.Provider value={{connectWallet,currentAccount}}>
+        <TransactionContext.Provider
+         value={{
+            connectWallet,
+            currentAccount,
+            formData,
+            sendTransaction,
+            handleChange}}>
+
             {children}
+
         </TransactionContext.Provider>
     )
 }
